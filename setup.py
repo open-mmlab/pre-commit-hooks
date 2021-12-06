@@ -7,18 +7,9 @@ def readme():
     return content
 
 
-version_file = 'mmprecommit/version.py'
-
-
-def get_version():
-    with open(version_file, 'r') as f:
-        exec(compile(f.read(), version_file, 'exec'))
-    return locals()['__version__']
-
-
 setup(
     name='mmprecommit',
-    version=get_version(),
+    version='0.1.0',
     description='A pre-commit hook',
     long_description=readme(),
     long_description_content_type='text/markdown',

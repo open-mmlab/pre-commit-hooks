@@ -7,14 +7,13 @@ Some pre-commit hooks for OpenMMLab projects.
 Add this to your `.pre-commit-config.yaml`
 
 ```yaml
--   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v0.0.0  # Use the ref you want to point at
+-   repo: https://github.com/zhouzaida/mmprecommit
+    rev: v0.1.0  # Use the ref you want to point at
     hooks:
     -   id: say-hello
 ```
 ## Hooks available
 
-### demo
+### say-hello
 
 A template to show how to implement a pre-commit hook
-
