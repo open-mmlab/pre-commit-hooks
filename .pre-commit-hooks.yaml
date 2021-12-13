@@ -10,3 +10,11 @@
   require_serial: true
   pass_filenames: false
   args: ['OpenMMLab']
+
+- id: check-algo-readme
+  name: check algorithm readme
+  description: check whether the abstract and icon exist in the algorithm readme
+  language: python
+  entry: check_algo_readme.py
+  require_serial: true
+  pass_filenames: false
