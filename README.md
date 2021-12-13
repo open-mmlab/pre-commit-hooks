@@ -1,4 +1,4 @@
-# MMPrecommit
+# pre-commit-hooks
 
 Some pre-commit hooks for OpenMMLab projects.
 
@@ -7,10 +7,10 @@ Some pre-commit hooks for OpenMMLab projects.
 Add this to your `.pre-commit-config.yaml`
 
 ```yaml
--   repo: https://github.com/zhouzaida/mmprecommit
+-   repo: https://github.com/zhouzaida/pre-commit-hooks
     rev: v0.1.0  # Use the ref you want to point at
     hooks:
-    -   id: say-hello
+    -   id: check-algo-readme
 ```
 ## Hooks available
 

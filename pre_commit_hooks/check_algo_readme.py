@@ -47,12 +47,12 @@ def extract_readme(readme_path: str) -> Tuple[str, str]:
                 line = file.readline()
 
     if not abstract:
-        print(f'Failed to extract abstract field from readme, \
-            please check {readme_path} again.')
+        print('Failed to extract abstract field from readme, '
+              f'please check {readme_path} again.')
 
     if not image:
-        print(f'Failed to extract image field from readme, \
-            please check {readme_path} again.')
+        print('Failed to extract image field from readme, '
+              f'please check {readme_path} again.')
 
     return abstract, image
 
@@ -98,8 +98,8 @@ def check_algorithm(model_index_path: str = 'model-index.yml',
 
     # make sure the input is a dict
     if model_index_data is None or not isinstance(model_index_data, dict):
-        print(f"Expected the file '{model_index_path}' to contain a dict, \
-                but it doesn't.")
+        print(f"Expected the file '{model_index_path}' to contain a dict, "
+              "but it doesn't.")
         collections = []
         retv = 1
     else:

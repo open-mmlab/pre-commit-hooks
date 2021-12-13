@@ -8,16 +8,19 @@ def readme():
 
 
 setup(
-    name='mmprecommit',
+    name='pre_commit_hooks',
     version='0.1.0',
-    description='A pre-commit hook',
+    description='A pre-commit hook for OpenMMLab projects',
     long_description=readme(),
     long_description_content_type='text/markdown',
-    url='https://github.com/open-mmlab/mmprecommit',
-    author='MMPrecommit Authors',
+    url='https://github.com/open-mmlab/pre-commit-hooks',
+    author='OpenMMLab Authors',
     author_email='openmmlab@gmail.com',
     packages=find_packages(),
     python_requires='>=3.6',
     install_requires=['PyYAML'],
-    scripts=['mmprecommit/say_hello.py', 'mmprecommit/check_algo_readme.py'],
+    scripts=[
+        'pre_commit_hooks/say_hello.py',
+        'pre_commit_hooks/check_algo_readme.py',
+    ],
 )
