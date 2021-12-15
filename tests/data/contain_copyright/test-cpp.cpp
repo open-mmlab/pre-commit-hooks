@@ -1,4 +1,4 @@
-// Copyright (c) Detectron2. All rights reserved.
+// Copyright (c) OpenMMLab. All rights reserved.
 #include "test-h.h"
 
 // function to add the elements of two arrays

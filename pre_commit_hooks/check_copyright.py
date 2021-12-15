@@ -120,7 +120,7 @@ def check_copyright(includes: List[str], excludes: List[str],
                     f.writelines([prefix + HEADER] + lines)
                     rev = 1
     for filepath in fixed_filepaths:
-        print(f'Fixing {filepath}')
+        print(f'Fixed {filepath}')
     return rev
 
 
