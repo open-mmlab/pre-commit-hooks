@@ -11,7 +11,7 @@ Add this to your `.pre-commit-config.yaml`
     rev: v0.1.0  # Use the ref you want to point at
     hooks:
     -   id: check-algo-readme
-    -   id: check-copy-right
+    -   id: check-copyright
         args: ["dir_to_check"]  # replace the dir_to_check with your expected directory to check
 ```
 ## Hooks available
