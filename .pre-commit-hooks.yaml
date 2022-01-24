@@ -6,7 +6,7 @@
   name: say hello
   description: a template to show how to implement a pre-commit hook
   language: python
-  entry: say_hello.py
+  entry: say-hello
   require_serial: true
   pass_filenames: false
   args: ['OpenMMLab']
@@ -15,7 +15,7 @@
   name: check algorithm readme
   description: check whether the abstract and icon exist in the algorithm readme
   language: python
-  entry: check_algo_readme.py
+  entry: check-algo-readme
   require_serial: true
   pass_filenames: false
 
@@ -23,6 +23,6 @@
   name: check copyright
   description: check whether the code contains copyright
   language: python
-  entry: check_copyright.py
+  entry: check-copyright
   require_serial: true
   pass_filenames: false
