@@ -19,10 +19,11 @@ setup(
     packages=find_packages(),
     python_requires='>=3.6',
     install_requires=['PyYAML'],
-    entry_points='''
-        [console_scripts]
-        say_hello=pre_commit_hooks.say_hello:main,
-        check-algo-readme=pre_commit_hooks.check_algo_readme:main,
-        check-copyright=pre_commit_hooks.check_copyright:main,
-    ''',
+    entry_points={
+        'console_scripts': [
+        'say-hello=pre_commit_hooks.say_hello:main',
+        'check-algo-readme=pre_commit_hooks.check_algo_readme:main',
+        'check-copyright=pre_commit_hooks.check_copyright:main',
+        ],
+    },
 )
