@@ -21,7 +21,7 @@ skip_pattern = re.compile(skip_matcher)
 def extract_readme(readme_path: str) -> Tuple[str, str]:
     type = ''
     abstract = ''
-    
+
     abstract_found = False
     skip_abstract_search = False
     if osp.exists(readme_path):
@@ -35,7 +35,8 @@ def extract_readme(readme_path: str) -> Tuple[str, str]:
                     abstract_found = abstract_start_pattern.match(line)
                 elif skip_pattern.match(line):
                     skip_abstract_search = True
-                elif not abstract and not line.strip() == '' and not line.startswith("<!--"):
+                elif not abstract and not line.strip(
+                ) == '' and not line.startswith('<!--'):
                     abstract = line
 
                 if type and abstract:
