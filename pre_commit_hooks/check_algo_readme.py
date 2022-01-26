@@ -29,9 +29,8 @@ def extract_abstract(readme_path: str) -> Tuple[str, str]:
     abstract_found = False
     skip_abstract_search = False
     if osp.exists(readme_path):
-        with open(readme_path, encoding='utf-8') as file:
-            line = file.readline()
-            while line:
+        with open(readme_path, encoding='utf-8') as f:
+            for line in f:
                 if not algorithm_type and type_pattern.match(line):
                     algorithm_type = line
 
@@ -48,8 +47,6 @@ def extract_abstract(readme_path: str) -> Tuple[str, str]:
 
                 if algorithm_type and skip_abstract_search:
                     break
-
-                line = file.readline()
 
     if not algorithm_type:
         print('Failed to find "<!-- [ALGORITHM] -->" flag from readme, '
