@@ -23,7 +23,7 @@ def extract_abstract(readme_path: str) -> Tuple[str, str]:
     will jump out of traversal.
     """
 
-    type = ''
+    algorithm_type = False
     abstract = ''
 
     abstract_found = False
@@ -32,8 +32,8 @@ def extract_abstract(readme_path: str) -> Tuple[str, str]:
         with open(readme_path, encoding='utf-8') as file:
             line = file.readline()
             while line:
-                if not type and type_pattern.match(line):
-                    type = line
+                if not algorithm_type and type_pattern.match(line):
+                    algorithm_type = line
 
                 if not abstract_found:
                     abstract_found = abstract_start_pattern.match(line)
@@ -43,23 +43,23 @@ def extract_abstract(readme_path: str) -> Tuple[str, str]:
                 ) == '' and not line.startswith('<!--'):
                     abstract = line
 
-                if type and abstract:
+                if algorithm_type and abstract:
                     break
 
-                if type and skip_abstract_search:
+                if algorithm_type and skip_abstract_search:
                     break
 
                 line = file.readline()
 
-    if not type:
-        print('Failed to extract algorithm type from readme, '
+    if not algorithm_type:
+        print('Failed to find "<!-- [ALGORITHM] -->" flag from readme, '
               f'please check {readme_path} again.')
 
-    if type and not abstract:
+    if algorithm_type and not abstract:
         print('Failed to extract abstract field from readme, '
               f'please check {readme_path} again.')
 
-    return abstract, type
+    return abstract, algorithm_type
 
 
 def handle_collection_name(name: str) -> str:
