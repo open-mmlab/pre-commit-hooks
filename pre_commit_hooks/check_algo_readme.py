@@ -48,6 +48,7 @@ def extract_abstract(readme_path: str) -> Tuple[str, str]:
                 if abstract_found:
                     if skip_pattern.match(line):
                         skip_abstract_search = True
+                    # filter out comment line
                     elif not abstract and not line.startswith('<!--'):
                         abstract = line
                 elif abstract_start_pattern.match(line):
