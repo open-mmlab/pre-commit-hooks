@@ -32,6 +32,9 @@ def extract_abstract(readme_path: str) -> Tuple[str, str]:
     if osp.exists(readme_path):
         with open(readme_path, encoding='utf-8') as f:
             for line in f:
+                if line.strip() == '':
+                    continue
+
                 if algorithm_type and (abstract or skip_abstract_search):
                     break
 
@@ -44,8 +47,7 @@ def extract_abstract(readme_path: str) -> Tuple[str, str]:
                 if abstract_found:
                     if skip_pattern.match(line):
                         skip_abstract_search = True
-                    elif not abstract and not line.strip(
-                    ) == '' and not line.startswith('<!--'):
+                    elif not abstract and not line.startswith('<!--'):
                         abstract = line
                 elif abstract_start_pattern.match(line):
                     abstract_found = True
