@@ -27,7 +27,7 @@ def extract_abstract(readme_path: str) -> Tuple[str, str]:
     abstract = ''
 
     abstract_found = False
-    # only search abstract under the heading of '## Abstract`, ignore other headings.
+    # only search abstract under the heading of `## Abstract`, ignore other headings.
     skip_abstract_search = False
     if osp.exists(readme_path):
         with open(readme_path, encoding='utf-8') as f:
