@@ -16,7 +16,13 @@ skip_matcher = r'^## .*'
 skip_pattern = re.compile(skip_matcher)
 
 
-def extract_readme(readme_path: str) -> Tuple[str, str]:
+def extract_abstract(readme_path: str) -> Tuple[str, str]:
+    """Check algorithm type and abstract.
+
+    It will traverse the readme document and match by line. If all matched, it
+    will jump out of traversal.
+    """
+
     type = ''
     abstract = ''
 
@@ -122,7 +128,7 @@ def check_algorithm(model_index_path: str = 'model-index.yml',
         display_name = handle_collection_name(name)
 
         readme_path = full_filepath(collection.get('README'), model_index_path)
-        abstract, type = extract_readme(readme_path)
+        abstract, type = extract_abstract(readme_path)
 
         if not abstract or not type:
             retv = 1
@@ -131,7 +137,7 @@ def check_algorithm(model_index_path: str = 'model-index.yml',
             pprint.pprint({
                 'name': display_name,
                 'readmePath': readme_path,
-                'image': type,
+                'type': type,
                 'introduction': abstract,
             })
 
