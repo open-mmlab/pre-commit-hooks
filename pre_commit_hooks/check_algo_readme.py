@@ -27,32 +27,35 @@ def extract_abstract(readme_path: str) -> Tuple[str, str]:
     abstract = ''
 
     abstract_found = False
+    # only search abstract under the heading of '## Abstract`, ignore other headings.
     skip_abstract_search = False
     if osp.exists(readme_path):
         with open(readme_path, encoding='utf-8') as f:
             for line in f:
+                if (algorithm_type and abstract) or (algorithm_type
+                                                     and skip_abstract_search):
+                    break
+
                 if not algorithm_type and type_pattern.match(line):
-                    algorithm_type = line
+                    algorithm_type = True
 
-                if not abstract_found:
-                    abstract_found = abstract_start_pattern.match(line)
-                elif skip_pattern.match(line):
-                    skip_abstract_search = True
-                elif not abstract and not line.strip(
-                ) == '' and not line.startswith('<!--'):
-                    abstract = line
+                if skip_abstract_search:
+                    continue
 
-                if algorithm_type and abstract:
-                    break
-
-                if algorithm_type and skip_abstract_search:
-                    break
+                if abstract_found:
+                    if skip_pattern.match(line):
+                        skip_abstract_search = True
+                    elif not abstract and not line.strip(
+                    ) == '' and not line.startswith('<!--'):
+                        abstract = line
+                elif abstract_start_pattern.match(line):
+                    abstract_found = True
 
     if not algorithm_type:
         print('Failed to find "<!-- [ALGORITHM] -->" flag from readme, '
               f'please check {readme_path} again.')
 
-    if algorithm_type and not abstract:
+    if not abstract:
         print('Failed to extract abstract field from readme, '
               f'please check {readme_path} again.')
 
@@ -112,9 +115,9 @@ def check_algorithm(model_index_path: str = 'model-index.yml',
             import_file = full_filepath(import_file, model_index_path)
             meta_file_data = load_any_file(import_file)
             if meta_file_data:
-                col = meta_file_data.get('Collections')
-                if col:
-                    collections.extend(col)
+                collection = meta_file_data.get('Collections')
+                if collection:
+                    collections.extend(collection)
 
             # set return code
             if meta_file_data is None:
@@ -125,17 +128,16 @@ def check_algorithm(model_index_path: str = 'model-index.yml',
         display_name = handle_collection_name(name)
 
         readme_path = full_filepath(collection.get('README'), model_index_path)
-        abstract, type = extract_abstract(readme_path)
+        abstract, algorithm_type = extract_abstract(readme_path)
 
-        if not abstract or not type:
+        if not abstract or not algorithm_type:
             retv = 1
 
         if debug:
             pprint.pprint({
                 'name': display_name,
                 'readmePath': readme_path,
-                'type': type,
-                'introduction': abstract,
+                'abstract': abstract,
             })
 
     return retv
