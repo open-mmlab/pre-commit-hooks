@@ -6,53 +6,63 @@ from typing import Tuple
 
 import yaml
 
-abstract_start_matcher = r'.*\[ABSTRACT\].*'
+type_matcher = r'.*<!-- \[ALGORITHM\] -->.*'
+type_pattern = re.compile(type_matcher)
+
+abstract_start_matcher = r'^## Abstract$'
 abstract_start_pattern = re.compile(abstract_start_matcher)
 
-icon_start_matcher = r'.*\[IMAGE\].*'
-icon_start_pattern = re.compile(icon_start_matcher)
-src_matcher = r'.*src=.*'
-src_line_pattern = re.compile(src_matcher)
-src_link_pattern = re.compile(r"\".*?\"")
+skip_matcher = r'^## .*'
+skip_pattern = re.compile(skip_matcher)
 
 
-def extract_readme(readme_path: str) -> Tuple[str, str]:
+def extract_abstract(readme_path: str) -> Tuple[str, str]:
+    """Check algorithm type and abstract.
+
+    It will traverse the readme document and match by line. If all matched, it
+    will jump out of traversal.
+    """
+
+    algorithm_type = False
     abstract = ''
-    image = ''
 
-    abstract_start_search = False
-    image_start_search = False
+    abstract_found = False
+    # only search abstract under the heading of `## Abstract`,
+    # ignore other headings.
+    skip_abstract_search = False
     if osp.exists(readme_path):
-        with open(readme_path, encoding='utf-8') as file:
-            line = file.readline()
-            while line:
-                # extract abstract
-                if abstract_start_search and not abstract:
-                    if not line.strip() == '':
-                        abstract = line
-                if not abstract_start_search:
-                    abstract_start_search = abstract_start_pattern.match(line)
+        with open(readme_path, encoding='utf-8') as f:
+            for line in f:
+                if line.strip() == '':
+                    continue
 
-                # extract image
-                if image_start_search and not image:
-                    src_group = src_line_pattern.search(line)
-                    if src_group:
-                        link_group = src_link_pattern.search(src_group.group())
-                        if link_group:
-                            image = link_group.group()[1:-1]
-                if not image_start_search:
-                    image_start_search = icon_start_pattern.match(line)
-                line = file.readline()
+                if algorithm_type and (abstract or skip_abstract_search):
+                    break
+
+                if not algorithm_type and type_pattern.match(line):
+                    algorithm_type = True
+
+                if skip_abstract_search:
+                    continue
+
+                if abstract_found:
+                    if skip_pattern.match(line):
+                        skip_abstract_search = True
+                    # filter out comment line
+                    elif not abstract and not line.startswith('<!--'):
+                        abstract = line
+                elif abstract_start_pattern.match(line):
+                    abstract_found = True
+
+    if not algorithm_type:
+        print('Failed to find "<!-- [ALGORITHM] -->" flag from readme, '
+              f'please check {readme_path} again.')
 
     if not abstract:
         print('Failed to extract abstract field from readme, '
               f'please check {readme_path} again.')
 
-    if not image:
-        print('Failed to extract image field from readme, '
-              f'please check {readme_path} again.')
-
-    return abstract, image
+    return abstract, algorithm_type
 
 
 def handle_collection_name(name: str) -> str:
@@ -108,8 +118,9 @@ def check_algorithm(model_index_path: str = 'model-index.yml',
             import_file = full_filepath(import_file, model_index_path)
             meta_file_data = load_any_file(import_file)
             if meta_file_data:
-                col = meta_file_data.get('Collections')
-                collections.extend(col)
+                collection = meta_file_data.get('Collections')
+                if collection:
+                    collections.extend(collection)
 
             # set return code
             if meta_file_data is None:
@@ -120,17 +131,16 @@ def check_algorithm(model_index_path: str = 'model-index.yml',
         display_name = handle_collection_name(name)
 
         readme_path = full_filepath(collection.get('README'), model_index_path)
-        abstract, image = extract_readme(readme_path)
+        abstract, algorithm_type = extract_abstract(readme_path)
 
-        if not abstract or not image:
+        if not abstract or not algorithm_type:
             retv = 1
 
         if debug:
             pprint.pprint({
                 'name': display_name,
                 'readmePath': readme_path,
-                'introduction': abstract,
-                'image': image,
+                'abstract': abstract,
             })
 
     return retv
