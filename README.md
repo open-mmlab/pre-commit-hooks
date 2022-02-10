@@ -8,7 +8,7 @@ Add this to your `.pre-commit-config.yaml`
 
 ```yaml
 -   repo: https://github.com/open-mmlab/pre-commit-hooks
-    rev: v0.1.0  # Use the ref you want to point at
+    rev: v0.2.0  # Use the ref you want to point at
     hooks:
     -   id: check-algo-readme
     -   id: check-copyright

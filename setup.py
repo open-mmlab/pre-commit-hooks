@@ -9,7 +9,7 @@ def readme():
 
 setup(
     name='pre_commit_hooks',
-    version='0.1.0',
+    version='0.2.0',
     description='A pre-commit hook for OpenMMLab projects',
     long_description=readme(),
     long_description_content_type='text/markdown',
