@@ -28,8 +28,8 @@
   pass_filenames: false
 
 - id: check-ecosystem-validity
-  name: check validity of yaml
-  description:
+  name: check ecosystem validity
+  description: check validity of yaml
   language: python
   entry: check-ecosystem-validity
   requires_serial: true
