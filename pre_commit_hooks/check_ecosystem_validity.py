@@ -40,7 +40,7 @@ def check_ecosystem_validity(input_files: str) -> int:
     Returns:
         Return 0 if there exists invalid key or value, otherwise return 1.
     """
-    rev = 1
+    rev = 0
 
     # read the data in yaml
     f = open(input_files, 'r')
@@ -62,7 +62,6 @@ def validity_check(project_info: dict) -> int:
     summary = project_info['summary']
 
     # check validity
-
     # check repo url
     assert repo_url.startswith('https://github.com/') or repo_url.startswith(
         'https://gitee.com/'), 'repo_url is invalid'
@@ -95,7 +94,7 @@ def validity_check(project_info: dict) -> int:
 
 def main():
     args = parse_args()
-    return check_ecosystem_validity(args.input_files)
+    return check_ecosystem_validity(args.input_files[0])
 
 
 if __name__ == '__main__':
