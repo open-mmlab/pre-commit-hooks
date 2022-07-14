@@ -33,5 +33,5 @@
   language: python
   entry: check-ecosystem-validity
   types: [yaml]
-  requires_serial: true
+  requires_serial: false
   pass_filenames: false
