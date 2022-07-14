@@ -13,6 +13,7 @@ Add this to your `.pre-commit-config.yaml`
     -   id: check-algo-readme
     -   id: check-copyright
         args: ["dir_to_check"]  # replace the dir_to_check with your expected directory to check
+    -   id: check-ecosystem-validity
 ```
 ## Hooks available
 
@@ -35,3 +36,9 @@ Check whether the code contains copyright
  * `includes` - directory to add copyright.
  * `--excludes` - exclude directory.
  * `--suffixes` - copyright will be added to files with suffix.
+
+### check-ecosystem-validity
+
+Check the validity of the ecosystem yaml file
+
+* `--input_files` - path of the project yaml
