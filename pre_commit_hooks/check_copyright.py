@@ -38,7 +38,7 @@ def parse_args():
 def check_args(includes: List[str], excludes: List[str], suffixes: List[str]):
     """Check the correctness of args and format them."""
 
-    valid_suffixes = set(['.py', '.h', '.cpp', '.cu', '.cuh', '.hpp'])
+    valid_suffixes = {'.py', '.h', '.cpp', '.cu', '.cuh', '.hpp'}
 
     # remove possible duplication
     includes = list(set(includes))
@@ -108,7 +108,7 @@ def check_copyright(includes: List[str], excludes: List[str],
     else:
         filepaths = get_filepaths(includes, excludes, suffixes)
         for filepath in filepaths:
-            with open(filepath, 'r', encoding='utf-8') as f:
+            with open(filepath, encoding='utf-8') as f:
                 lines = f.readlines()
             if not has_copyright(lines):
                 fixed_filepaths.append(filepath)

@@ -15,7 +15,7 @@ def test_copyright():
         for root, dirs, files in os.walk(dir):
             for file in files:
                 filepath = osp.join(root, file)
-                with open(filepath, 'r', encoding='utf-8') as f:
+                with open(filepath, encoding='utf-8') as f:
                     lines = f.readlines()
                     if root not in excludes:
                         assert lines[0].split(' ').count('Copyright') > 0
@@ -31,6 +31,6 @@ def test_copyright():
         for root, dirs, files in os.walk(dir):
             for file in files:
                 filepath = osp.join(root, file)
-                with open(filepath, 'r', encoding='utf-8') as f:
+                with open(filepath, encoding='utf-8') as f:
                     line = f.readline()
                     assert line.split(' ').count('OpenMMLab.') > 0

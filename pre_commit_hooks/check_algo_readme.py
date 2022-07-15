@@ -90,7 +90,7 @@ def load_any_file(path: str):
         print(f'File "{path}" does not exist.')
         return None
 
-    with open(path, 'r') as f:
+    with open(path) as f:
         raw = yaml.load(f, Loader=yaml.SafeLoader)
 
     return raw
