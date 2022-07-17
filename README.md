@@ -36,3 +36,19 @@ Check whether the code contains copyright
 - `includes` - directory to add copyright.
 - `--excludes` - exclude directory.
 - `--suffixes` - copyright will be added to files with suffix.
+
+### check-model-index
+
+Check whether the model-index.yml conforms to specification.
+
+- `filename` - model-index file path.
+
+```yaml
+-   repo: https://github.com/open-mmlab/pre-commit-hooks
+    rev: v0.2.1  # Use the ref you want to point at
+    hooks:
+    -   id: check-model-index
+        args: ["model-index.yml"]
+        additional_dependencies:
+          - cerberus
+```

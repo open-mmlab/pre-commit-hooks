@@ -24,6 +24,7 @@ setup(
             'say-hello=pre_commit_hooks.say_hello:main',
             'check-algo-readme=pre_commit_hooks.check_algo_readme:main',
             'check-copyright=pre_commit_hooks.check_copyright:main',
+            'check-model-index=pre_commit_hooks.check_model_index:main',
         ],
     },
 )
