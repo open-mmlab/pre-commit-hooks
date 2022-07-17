@@ -26,3 +26,11 @@
   entry: check-copyright
   require_serial: true
   pass_filenames: false
+
+- id: check-model-index
+  name: check model index
+  description: Check whether the model-index.yml conforms to specification
+  language: python
+  entry: check-model-index
+  require_serial: true
+  pass_filenames: false
