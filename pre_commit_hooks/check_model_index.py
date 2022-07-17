@@ -46,6 +46,10 @@ collection_schema = {
                 'type': 'integer',
                 'required': False,
             },
+            'Training Time': {
+                'type': 'number',
+                'required': False,
+            },
             'Train time (s/iter)': {
                 'type': 'number',
                 'required': False,
@@ -89,7 +93,6 @@ model_schema = {
     },
     'In Collection': {
         'type': 'string',
-        'required': False
     },
     'Metadata': {
         'type': 'dict',
@@ -148,27 +151,30 @@ model_schema = {
                 }
             },
             'inference time (ms/im)': {
-                'type': 'dict',
+                'type': 'list',
                 'required': False,
                 'schema': {
-                    'value': {
-                        'type': 'float',  # 'number' may be better
+                    'type': 'dict',
+                    'schema': {
+                        'value': {
+                            'type': 'float',  # 'number' may be better
+                        },
+                        'hardware': {
+                            'type': 'string',
+                        },
+                        'backend': {
+                            'type': 'string',
+                        },
+                        'batch size': {
+                            'type': 'integer',
+                        },
+                        'mode': {
+                            'type': 'string',
+                        },
+                        'resolution': {
+                            'type': 'list',
+                        }
                     },
-                    'hardware': {
-                        'type': 'string',
-                    },
-                    'backend': {
-                        'type': 'string',
-                    },
-                    'batch_size': {
-                        'type': 'integer',
-                    },
-                    'mode': {
-                        'type': 'string',
-                    },
-                    'resolution': {
-                        'type': 'list',
-                    }
                 },
             },
         },
@@ -176,7 +182,7 @@ model_schema = {
     'Results': {
         'type': 'list',
         'schema': {
-            'type': 'string',
+            'type': 'dict',
             'schema': {
                 'Task': {
                     'type': 'string'
@@ -185,10 +191,7 @@ model_schema = {
                     'type': 'string'
                 },
                 'Metrics': {
-                    'type': 'list',
-                    'schema': {
-                        'type': 'dict',
-                    }
+                    'type': 'dict',
                 }
             }
         },
