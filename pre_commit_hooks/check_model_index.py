@@ -273,6 +273,7 @@ def check_model_index(path: str) -> bool:
     retv = 0
     error_messages = defaultdict(dict)
     collection_names = defaultdict(list)
+    in_collection_names = set()
     model_names = defaultdict(list)
     model_index_data = load_metafile(path)
 
@@ -300,6 +301,7 @@ def check_model_index(path: str) -> bool:
                 models = metafile_data.get('Models')
                 if models is not None:
                     for model in models:
+                        in_collection_names.add(model['In Collection'])
                         model_names[model['Name']].append(metafile_path)
                         if not model_validatetor.validate(model):
                             error_message.setdefault('models', {})
@@ -328,6 +330,23 @@ def check_model_index(path: str) -> bool:
                 print(f'\t{path}')
 
             retv = 1
+
+    collection_names_set = set(collection_names.keys())
+    if collection_names_set != in_collection_names:
+        print('collection names referred by models should be euqal to '
+              'collection names.')
+
+        different_set = collection_names_set - in_collection_names
+        if different_set:
+            print(
+                f'collection names {different_set} are not referred by models')
+
+        different_set = in_collection_names - collection_names_set
+        if different_set:
+            print(f'collection names {different_set} referred by models but '
+                  'not in collection_names')
+
+        retv = 1
 
     for path, msg in error_messages.items():
         print(f'\n{path}')
