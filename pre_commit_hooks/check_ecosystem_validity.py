@@ -104,6 +104,7 @@ def check_project_validity(project_info: dict) -> int:
     }
     validator = cerberus.Validator()
     retv = validator.validate(project_info, ecosystem_schema)
+    print(retv)
     if not retv:
         print(validator._errors)
     return retv
@@ -116,7 +117,7 @@ def check_ecosystem_validity(filename: str) -> int:
         filename: Path of the ecoystem project information
 
     Returns:
-        Return 0 if there exists invalid key or value, otherwise return 1.
+        Return 0 if all key and value are valid, otherwise return 1.
     """
     retv = 0
 
