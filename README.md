@@ -42,4 +42,14 @@ Check whether the code contains copyright
 
 Check the validity of the ecosystem yaml file
 
-- `--input_files` - path of the project yaml
+- `--filename` - path of the project yaml
+
+```yaml
+  - repo: https://github.com/open-mmlab/pre-commit-hooks
+    rev: v0.2.1
+    hooks:
+    -   id: check-ecosystem-validity
+        args: [projects_index.yaml]
+        additional_dependencies:
+          - cerberus
+```

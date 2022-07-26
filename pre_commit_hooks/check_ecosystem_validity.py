@@ -3,7 +3,7 @@ import argparse
 import cerberus
 import yaml
 
-VALID_TYPE = [
+VALID_TYPES = [
     'Official Implementation',
     'Community Implementation',
     'Competition',
@@ -22,48 +22,17 @@ VALID_MMREPOS = [
 ]
 
 
-def parse_args():
-    parser = argparse.ArgumentParser(
-        description='Check the validity of the key in ecosystem information')
-    parser.add_argument(
-        'input_files', type=str, nargs='+', help='path of the yaml file')
-
-    args = parser.parse_args()
-    return args
-
-
-def check_ecosystem_validity(input_files: str) -> int:
-    """Check the validity of the key-value in the ecosystem project yaml.
-
-    Args:
-        input_files: Path of the ecoystem project information
-
-    Returns:
-        Return 0 if there exists invalid key or value, otherwise return 1.
-    """
-    rev = 0
-
-    # read the data in yaml
-    f = open(input_files)
-    projects = yaml.safe_load(f)
-    for one_project in projects:
-        validity_check(one_project)
-
-    return rev
-
-
-def repo_url_check(field, value, error):
+def check_repo_url(field, value, error):
     """Check the validity of repo_url."""
-    valid_flag = value.startswith('https://github.com/') or \
-        value.startswith('https://gitee.com/') or \
-        value.startswith('https://gitlab.com/')
+    valid_urls = ('https://github.com/', 'https://gitee.com/',
+                  'https://gitlab.com/')
+    valid_flag = value.startswith(valid_urls)
     if not valid_flag:
-        error(
-            field, 'repo_url is invalid, must start with one of '
-            '[https://github.com/, https://gitee.com/, https://gitlab.com/]')
+        error(field,
+              f'repo_url is invalid, must start with one of {valid_urls}')
 
 
-def paper_url_check(field, value, error):
+def check_paper_url(field, value, error):
     """Check the validity of paper_url."""
     valid_flag = True if not value else value.startswith('https://') or \
         value.startswith('http://')
@@ -73,39 +42,39 @@ def paper_url_check(field, value, error):
             'with https:// or http://, or leave for empty')
 
 
-def tag_check(field, value, error):
+def check_tag(field, value, error):
     """Check the validity of tag."""
     # check number of tags
     if len(value) > 5:
         error(
             field, 'Please use no more than 5 tags,'
-            'current number: {}'.format(len(value)))
+            f'current number: {len(value)}')
     # check string validity
     valid_flag = True
     for tag in value:
         if ',' in tag:
             valid_flag = False
     if not valid_flag:
-        error(field, ' \',\' is not allowed used in tag')
+        error(field, "',' is not allowed used in tag")
 
 
-def validity_check(project_info: dict) -> int:
+def check_project_validity(project_info: dict) -> int:
     """Check the validity of one project."""
     ecosystem_schema = {
         'repo_url': {
             'type': 'string',
             'required': True,
-            'check_with': repo_url_check
+            'check_with': check_repo_url
         },
         'paper_url': {
             'type': 'string',
             'required': True,
             'empty': True,  # allow to be ''
-            'check_with': paper_url_check
+            'check_with': check_paper_url
         },
         'type': {
             'type': 'string',
-            'allowed': VALID_TYPE,
+            'allowed': VALID_TYPES,
             'required': True,
         },
         'mmrepos': {
@@ -116,7 +85,7 @@ def validity_check(project_info: dict) -> int:
         'tags': {
             'type': 'list',
             'required': True,
-            'check_with': tag_check
+            'check_with': check_tag
         },
         'summary': {
             'type': 'dict',
@@ -134,13 +103,40 @@ def validity_check(project_info: dict) -> int:
         }
     }
     validator = cerberus.Validator()
-    assert validator.validate(project_info,
-                              ecosystem_schema), validator._errors
+    retv = validator.validate(project_info, ecosystem_schema)
+    if not retv:
+        print(validator._errors)
+    return retv
+
+
+def check_ecosystem_validity(filename: str) -> int:
+    """Check the validity of the key-value in the ecosystem project yaml.
+
+    Args:
+        filename: Path of the ecoystem project information
+
+    Returns:
+        Return 0 if there exists invalid key or value, otherwise return 1.
+    """
+    retv = 0
+
+    # read the data in yaml
+    f = open(filename)
+    projects = yaml.safe_load(f)
+    for project in projects:
+        if not check_project_validity(project):
+            retv = 1
+
+    return retv
 
 
 def main():
-    args = parse_args()
-    return check_ecosystem_validity(args.input_files[0])
+    parser = argparse.ArgumentParser(
+        description='Check the validity of the key in ecosystem information')
+    parser.add_argument('filename', type=str, help='path of the yaml file')
+    args = parser.parse_args()
+
+    return check_ecosystem_validity(args.filename)
 
 
 if __name__ == '__main__':
