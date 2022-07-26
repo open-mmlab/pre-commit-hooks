@@ -35,3 +35,5 @@
   types: [yaml]
   requires_serial: false
   pass_filenames: false
+  additional_dependencies:
+  - cerberus

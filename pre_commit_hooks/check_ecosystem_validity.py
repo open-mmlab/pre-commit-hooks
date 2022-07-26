@@ -1,5 +1,6 @@
 import argparse
 
+import cerberus
 import yaml
 
 VALID_TYPE = [
@@ -14,10 +15,10 @@ VALID_TYPE = [
 ]
 
 VALID_MMREPOS = [
-    'mmcv', 'mmclassification', 'mmdetection', 'mmdetection3d', 'mmrotate',
-    'mmsegmentation', 'mmocr', 'mmpose', 'mmhuman3d', 'mmselfsup', 'mmrazor',
-    'mmfewshot', 'mmaction2', 'mmtracking', 'mmflow', 'mmediting',
-    'mmgeneration', 'mmdeploy'
+    'MMCV', 'MMClassification', 'MMDetection', 'MMDetection3D', 'MMRotate',
+    'MMSegmentation', 'MMOCR', 'MMPose', 'MMHuman3D', 'MMSelfSup', 'MMRazor',
+    'MMFewShot', 'MMAction2', 'MMTracking', 'MMFlow', 'MMEditing',
+    'MMGeneration', 'MMDeploy'
 ]
 
 
@@ -51,45 +52,90 @@ def check_ecosystem_validity(input_files: str) -> int:
     return rev
 
 
+def repo_url_check(field, value, error):
+    """Check the validity of repo_url."""
+    valid_flag = value.startswith('https://github.com/') or \
+        value.startswith('https://gitee.com/') or \
+        value.startswith('https://gitlab.com/')
+    if not valid_flag:
+        error(
+            field, 'repo_url is invalid, must start with one of '
+            '[https://github.com/, https://gitee.com/, https://gitlab.com/]')
+
+
+def paper_url_check(field, value, error):
+    """Check the validity of paper_url."""
+    valid_flag = True if not value else value.startswith('https://') or \
+        value.startswith('http://')
+    if not valid_flag:
+        error(
+            field, 'paper_url is invalid,  must starts '
+            'with https:// or http://, or leave for empty')
+
+
+def tag_check(field, value, error):
+    """Check the validity of tag."""
+    # check number of tags
+    if len(value) > 5:
+        error(
+            field, 'Please use no more than 5 tags,'
+            'current number: {}'.format(len(value)))
+    # check string validity
+    valid_flag = True
+    for tag in value:
+        if ',' in tag:
+            valid_flag = False
+    if not valid_flag:
+        error(field, ' \',\' is not allowed used in tag')
+
+
 def validity_check(project_info: dict) -> int:
     """Check the validity of one project."""
-    # parsing the each key-value
-    repo_url = project_info['repo_url']
-    paper_url = project_info['paper_url']
-    type = project_info['type']
-    mmrepos = project_info['mmrepos']
-    tags = project_info['tags']
-    summary = project_info['summary']
-
-    # check validity
-    # check repo url
-    assert repo_url.startswith('https://github.com/') or repo_url.startswith(
-        'https://gitee.com/'), 'repo_url is invalid'
-
-    # check paper url
-    if paper_url is None:
-        pass
-    else:
-        assert paper_url.startswith('https://') or paper_url.startswith(
-            'http://'), 'paper_url is invalid'
-
-    # check type
-    assert type in VALID_TYPE, 'type: {} is invalid, must be one of \
-    {}'.format(type, VALID_TYPE)
-
-    # check mmrepos
-    for item in mmrepos:
-        assert item in VALID_MMREPOS, '{} is invalid, must be one of \
-        {}'.format(item, VALID_MMREPOS)
-
-    # check tags
-    for tag in tags:
-        assert ',' not in tag
-        assert tag is not None
-
-    # check summary
-    assert len(
-        summary) == 2 and 'en' in summary.keys() and 'zh' in summary.keys()
+    ecosystem_schema = {
+        'repo_url': {
+            'type': 'string',
+            'required': True,
+            'check_with': repo_url_check
+        },
+        'paper_url': {
+            'type': 'string',
+            'required': True,
+            'empty': True,  # allow to be ''
+            'check_with': paper_url_check
+        },
+        'type': {
+            'type': 'string',
+            'allowed': VALID_TYPE,
+            'required': True,
+        },
+        'mmrepos': {
+            'type': 'list',
+            'allowed': VALID_MMREPOS,
+            'required': True,
+        },
+        'tags': {
+            'type': 'list',
+            'required': True,
+            'check_with': tag_check
+        },
+        'summary': {
+            'type': 'dict',
+            'required': True,
+            'schema': {
+                'zh': {
+                    'type': 'string',
+                    'required': True
+                },
+                'en': {
+                    'type': 'string',
+                    'required': True
+                }
+            }
+        }
+    }
+    validator = cerberus.Validator()
+    assert validator.validate(project_info,
+                              ecosystem_schema), validator._errors
 
 
 def main():
