@@ -44,7 +44,7 @@ def check_ecosystem_validity(input_files: str) -> int:
     rev = 0
 
     # read the data in yaml
-    f = open(input_files, 'r')
+    f = open(input_files)
     projects = yaml.safe_load(f)
     for one_project in projects:
         validity_check(one_project)
