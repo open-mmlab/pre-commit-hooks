@@ -33,7 +33,7 @@
   language: python
   entry: check-ecosystem-validity
   types: [yaml]
-  requires_serial: false
+  require_serial: false
   pass_filenames: false
   additional_dependencies:
   - cerberus

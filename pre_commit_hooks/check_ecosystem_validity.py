@@ -104,7 +104,6 @@ def check_project_validity(project_info: dict) -> int:
     }
     validator = cerberus.Validator()
     retv = validator.validate(project_info, ecosystem_schema)
-    print(retv)
     if not retv:
         print(validator._errors)
     return retv
