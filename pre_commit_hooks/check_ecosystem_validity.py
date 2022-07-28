@@ -1,4 +1,5 @@
 import argparse
+import pprint
 
 import cerberus
 import yaml
@@ -105,7 +106,11 @@ def check_project_validity(project_info: dict) -> int:
     validator = cerberus.Validator()
     retv = validator.validate(project_info, ecosystem_schema)
     if not retv:
-        print(validator._errors)
+        prrint_handle = pprint.PrettyPrinter()
+        prrint_handle.pprint(project_info)
+        for error in validator._errors:
+            print(f'Value of {error.document_path} is {error.value}'
+                  f'\n\tconstraint: {error.constraint}\n\trule:{error.info}')
     return retv
 
 
@@ -123,9 +128,20 @@ def check_ecosystem_validity(filename: str) -> int:
     # read the data in yaml
     f = open(filename)
     projects = yaml.safe_load(f)
+    # check validity of each project
     for project in projects:
         if not check_project_validity(project):
             retv = 1
+
+    # check with/without repeated projects
+    projects_dict = {}
+    for idx, project in enumerate(projects):
+        curr_repo_url = project['repo_url']
+        if not curr_repo_url not in projects_dict.keys():
+            retv = 1
+            print(f"'{curr_repo_url}' is repeated,"
+                  ' please search it and remove the repeated items')
+        projects_dict[curr_repo_url] = {'idx': idx}
 
     return retv
 

@@ -12,6 +12,20 @@
     en: Official PyTorch implementation of Fully Attentional Networks
     zh: 基于PyTorch的Fully Attentional Networks官方实现
 
+
+- repo_url: https://githubbb.com/NVlabs/FAN # repo 路径
+  paper_url: https://arxiv.org/abs/2204.12451 # paper 链接
+  type: Official Implementation # 项目类型
+  mmrepos: # 使用了那些openmmlab工具（mmcv/mmengine是否要加入可选项）
+    - MMDetections
+    - MMSegmentation
+  tags:
+    - ICML,
+    - Vision Transformer
+  summary:
+    en: Official PyTorch implementation of Fully Attentional Networks
+    zh: 基于PyTorch的Fully Attentional Networks官方实现
+
 # Example-2
 - repo_url: https://github.com/Ascend/ModelZoo-PyTorch
   paper_url: ''
