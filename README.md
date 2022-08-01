@@ -8,12 +8,15 @@ Add this to your `.pre-commit-config.yaml`
 
 ```yaml
 -   repo: https://github.com/open-mmlab/pre-commit-hooks
-    rev: v0.2.0  # Use the ref you want to point at
+    rev: v0.2.1  # Use the ref you want to point at
     hooks:
     -   id: check-algo-readme
     -   id: check-copyright
         args: ["dir_to_check"]  # replace the dir_to_check with your expected directory to check
     -   id: check-ecosystem-validity
+        args: [projects_index.yaml]
+        additional_dependencies:
+          - cerberus
 ```
 
 ## Hooks available
