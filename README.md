@@ -42,7 +42,7 @@ Check whether the code contains copyright
 
 Check the validity of the ecosystem yaml file
 
-- `--filename` - path of the project yaml
+- `filename` - path of the project yaml
 
 ```yaml
   - repo: https://github.com/open-mmlab/pre-commit-hooks
