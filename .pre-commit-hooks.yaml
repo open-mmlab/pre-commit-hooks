@@ -26,3 +26,14 @@
   entry: check-copyright
   require_serial: true
   pass_filenames: false
+
+- id: check-ecosystem-validity
+  name: check ecosystem validity
+  description: check validity of yaml
+  language: python
+  entry: check-ecosystem-validity
+  types: [yaml]
+  require_serial: false
+  pass_filenames: false
+  additional_dependencies:
+  - cerberus

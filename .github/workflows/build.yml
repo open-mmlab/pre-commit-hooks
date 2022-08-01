@@ -25,5 +25,6 @@ jobs:
           pre-commit install
       - name: unit-test
         run: |
+          pip install cerberus
           pip install pytest
           pytest tests/
