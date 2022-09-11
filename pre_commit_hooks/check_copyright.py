@@ -31,11 +31,15 @@ def parse_args():
         type=str,
         default=['.py'],
         help='copyright will be added to files with suffixes')
+    parser.add_argument('--ignore-file-not-found-error', action='store_true')
     args = parser.parse_args()
     return args
 
 
-def check_args(includes: List[str], excludes: List[str], suffixes: List[str]):
+def check_args(includes: List[str],
+               excludes: List[str],
+               suffixes: List[str],
+               ignore_file_not_found_error: bool = False):
     """Check the correctness of args and format them."""
 
     valid_suffixes = {'.py', '.h', '.cpp', '.cu', '.cuh', '.hpp'}
@@ -47,19 +51,20 @@ def check_args(includes: List[str], excludes: List[str], suffixes: List[str]):
 
     # check the correctness and format args
     for i, dir in enumerate(includes):
-        if not osp.exists(dir):
+        if not osp.exists(dir) and not ignore_file_not_found_error:
             raise FileNotFoundError(f'Include {dir} can not be found')
-        else:
-            includes[i] = osp.abspath(dir)
+        includes[i] = osp.abspath(dir)
+
     for i, dir in enumerate(excludes):
-        if not osp.exists(dir):
+        if not osp.exists(dir) and not ignore_file_not_found_error:
             raise FileNotFoundError(f'Exclude {dir} can not be found')
-        else:
-            excludes[i] = osp.abspath(dir)
+        excludes[i] = osp.abspath(dir)
+
     for suffix in suffixes:
         if suffix not in valid_suffixes:
-            raise FileNotFoundError(
+            raise ValueError(
                 f'Expected suffixes are {valid_suffixes}, but got {suffix}')
+
     return includes, excludes, suffixes
 
 
@@ -69,7 +74,7 @@ def get_filepaths(includes: List[str], excludes: List[str],
 
     filepaths = []
     for include in includes:
-        for root, dirs, files in os.walk(include):
+        for root, _, files in os.walk(include):
             is_exclude = False
             for exclude in excludes:
                 if root.startswith(exclude):
@@ -86,14 +91,19 @@ def get_filepaths(includes: List[str], excludes: List[str],
     return filepaths
 
 
-def check_copyright(includes: List[str], excludes: List[str],
-                    suffixes: List[str]) -> int:
+def check_copyright(includes: List[str],
+                    excludes: List[str],
+                    suffixes: List[str],
+                    ignore_file_not_found_error: bool = False) -> int:
     """Add copyright for those files which lack copyright.
 
     Args:
         includes: Directory to add copyright.
         excludes: Exclude directory.
         suffixes: Copyright will be added to files with suffixes.
+        ignore_file_not_found_error: Whether to ignore `FileNotFoundError` when
+            some directories are specified to add copyright but they are not
+            found.
 
     returns:
         Returns 0 if no file is missing copyright, otherwise returns 1.
@@ -101,8 +111,9 @@ def check_copyright(includes: List[str], excludes: List[str],
     rev = 0
     fixed_filepaths = []
     try:
-        includes, excludes, suffixes = check_args(includes, excludes, suffixes)
-    except FileNotFoundError as e:
+        includes, excludes, suffixes = check_args(includes, excludes, suffixes,
+                                                  ignore_file_not_found_error)
+    except (FileNotFoundError, ValueError) as e:
         print(repr(e))
         return 1
     else:
@@ -124,7 +135,8 @@ def check_copyright(includes: List[str], excludes: List[str],
 
 def main():
     args = parse_args()
-    return check_copyright(args.includes, args.excludes, args.suffixes)
+    return check_copyright(args.includes, args.excludes, args.suffixes,
+                           args.ignore_file_not_found_error)
 
 
 if __name__ == '__main__':
