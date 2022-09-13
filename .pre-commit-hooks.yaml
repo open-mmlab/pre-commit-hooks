@@ -41,7 +41,7 @@
 - id: remove-improper-eol-in-cn-docs
   name: remove improper eol in cn docs
   description: Remove the end_of_line characters that split natural paragraphs in Chinese docs
-  entry: remove_eol_characters
+  entry: remove-eol-characters
   language: python
   files: .*\.md$
   pass_filenames: true
