@@ -24,7 +24,7 @@ setup(
             'say-hello=pre_commit_hooks.say_hello:main',
             'check-algo-readme=pre_commit_hooks.check_algo_readme:main',
             'check-copyright=pre_commit_hooks.check_copyright:main',
-            'check-ecosystem-validity=pre_commit_hooks.check_ecosystem_validity:main'  # noqa: E501
+            'check-ecosystem-validity=pre_commit_hooks.check_ecosystem_validity:main',  # noqa: E501
             'remove-eol-characters=pre_commit_hooks.remove_eol_characters:main'
         ],
     },

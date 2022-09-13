@@ -37,9 +37,13 @@ def rewrite_file(file_name: str, strategies: List[Tuple[str, str]]) -> bool:
     return changed
 
 
-if __name__ == '__main__':
+def main():
     strategies = [remove_eol()]
     changed = False
     for file in sys.argv[1:]:
         changed = changed | rewrite_file(file, strategies)
-    sys.exit(changed)
+    return changed
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())
