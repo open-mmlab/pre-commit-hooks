@@ -1,6 +1,5 @@
 #! /usr/bin/env python
 
-import codecs
 import re
 import sys
 from typing import List, Tuple
@@ -23,7 +22,7 @@ def remove_eol() -> Tuple[str, str]:
 
 
 def rewrite_file(file_name: str, strategies: List[Tuple[str, str]]) -> bool:
-    with codecs.open(file_name, mode='r', encoding='utf-8') as f:
+    with open(file_name, encoding='utf-8') as f:
         contents = f.read()
     changed = False
     for pattern, repl in strategies:
@@ -32,7 +31,7 @@ def rewrite_file(file_name: str, strategies: List[Tuple[str, str]]) -> bool:
         contents = re.sub(pattern, repl, contents)
         changed = True
     if changed:
-        with codecs.open(file_name, mode='w', encoding='utf-8') as f:
+        with open(file_name, mode='w', encoding='utf-8') as f:
             f.write(contents)
     return changed
 
