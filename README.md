@@ -40,6 +40,7 @@ Check whether the code contains copyright
 - `includes` - directory to add copyright.
 - `--excludes` - exclude directory.
 - `--suffixes` - copyright will be added to files with suffix.
+- `--ignore-file-not-found-error` - Whether to ignore `FileNotFoundError` when some directories are specified to add copyright but they are not found.
 
 ### check-ecosystem-validity
 
