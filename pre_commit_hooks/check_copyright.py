@@ -51,14 +51,18 @@ def check_args(includes: List[str],
 
     # check the correctness and format args
     for i, dir in enumerate(includes):
-        if not osp.exists(dir) and not ignore_file_not_found_error:
-            raise FileNotFoundError(f'Include {dir} can not be found')
-        includes[i] = osp.abspath(dir)
+        if not osp.exists(dir):
+            if not ignore_file_not_found_error:
+                raise FileNotFoundError(f'Include {dir} can not be found')
+        else:
+            includes[i] = osp.abspath(dir)
 
     for i, dir in enumerate(excludes):
-        if not osp.exists(dir) and not ignore_file_not_found_error:
-            raise FileNotFoundError(f'Exclude {dir} can not be found')
-        excludes[i] = osp.abspath(dir)
+        if not osp.exists(dir):
+            if not ignore_file_not_found_error:
+                raise FileNotFoundError(f'Exclude {dir} can not be found')
+        else:
+            excludes[i] = osp.abspath(dir)
 
     for suffix in suffixes:
         if suffix not in valid_suffixes:
