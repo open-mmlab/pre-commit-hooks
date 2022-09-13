@@ -21,8 +21,8 @@ def remove_eol() -> Tuple[str, str]:
     return pattern, repl
 
 
-def rewrite_file(file_name: str, strategies: List[Tuple[str, str]]) -> bool:
-    with open(file_name, encoding='utf-8') as f:
+def rewrite_file(filename: str, strategies: List[Tuple[str, str]]) -> bool:
+    with open(filename, encoding='utf-8') as f:
         contents = f.read()
     changed = False
     for pattern, repl in strategies:
@@ -31,7 +31,7 @@ def rewrite_file(file_name: str, strategies: List[Tuple[str, str]]) -> bool:
         contents = re.sub(pattern, repl, contents)
         changed = True
     if changed:
-        with open(file_name, mode='w', encoding='utf-8') as f:
+        with open(filename, mode='w', encoding='utf-8') as f:
             f.write(contents)
     return changed
 
