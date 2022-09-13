@@ -37,3 +37,12 @@
   pass_filenames: false
   additional_dependencies:
   - cerberus
+
+- id: remove-improper-eol-in-cn-docs
+  name: remove improper eol in cn docs
+  description: Remove the end_of_line characters that split natural paragraphs in Chinese docs
+  entry: remove-eol-characters
+  language: python
+  files: .*\.md$
+  pass_filenames: true
+  require_serial: true

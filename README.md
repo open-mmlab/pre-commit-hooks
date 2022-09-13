@@ -8,7 +8,7 @@ Add this to your `.pre-commit-config.yaml`
 
 ```yaml
 -   repo: https://github.com/open-mmlab/pre-commit-hooks
-    rev: v0.3.0  # Use the ref you want to point at
+    rev: v0.4.0  # Use the ref you want to point at
     hooks:
     -   id: check-algo-readme
     -   id: check-copyright
@@ -17,6 +17,7 @@ Add this to your `.pre-commit-config.yaml`
         args: [projects_index.yaml]
         additional_dependencies:
           - cerberus
+    -   id: remove-improper-eol-in-cn-docs
 ```
 
 ## Hooks available
@@ -50,10 +51,33 @@ Check the validity of the ecosystem yaml file
 
 ```yaml
   - repo: https://github.com/open-mmlab/pre-commit-hooks
-    rev: v0.3.0
+    rev: v0.4.0
     hooks:
     -   id: check-ecosystem-validity
         args: [projects_index.yaml]
         additional_dependencies:
           - cerberus
+```
+
+### remove-improper-eol-in-cn-docs
+
+Remove end-of-line characters that split natural paragraphs in Chinese docs.
+
+This helps resolve extra whitespaces in Chinese Markdown docs described [here](https://stackoverflow.com/questions/8550112/prevent-workaround-browser-converting-n-between-lines-into-space-for-chinese/8551033#8551033), as a long-standing HTML rendering issue. For example,
+
+> 这是一个，
+> 像诗一样的
+> 测试
+
+will be changed to:
+
+> 这是一个，像诗一样的测试
+
+Usage:
+
+```yaml
+  - repo: https://github.com/open-mmlab/pre-commit-hooks
+    rev: v0.4.0
+    hooks:
+    -   id: remove-improper-eol-in-cn-docs
 ```
