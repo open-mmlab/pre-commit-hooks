@@ -19,7 +19,7 @@ VALID_MMREPOS = [
     'MMCV', 'MMClassification', 'MMDetection', 'MMDetection3D', 'MMRotate',
     'MMSegmentation', 'MMOCR', 'MMPose', 'MMHuman3D', 'MMSelfSup', 'MMRazor',
     'MMFewShot', 'MMAction2', 'MMTracking', 'MMFlow', 'MMEditing',
-    'MMGeneration', 'MMDeploy'
+    'MMGeneration', 'MMDeploy', "MMEngine", "MMEval"
 ]
 
 
