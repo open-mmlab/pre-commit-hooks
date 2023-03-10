@@ -17,6 +17,5 @@ jobs:
           python-version: 3.7
       - name: unit-test
         run: |
-          pip install cerberus
-          pip install pytest
+          pip install cerberus pytest
           pytest tests/
