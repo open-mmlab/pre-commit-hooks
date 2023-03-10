@@ -8,7 +8,7 @@ Add this to your `.pre-commit-config.yaml`
 
 ```yaml
 -   repo: https://github.com/open-mmlab/pre-commit-hooks
-    rev: v0.4.0  # Use the ref you want to point at
+    rev: v0.4.1  # Use the ref you want to point at
     hooks:
     -   id: check-algo-readme
     -   id: check-copyright
@@ -51,7 +51,7 @@ Check the validity of the ecosystem yaml file
 
 ```yaml
   - repo: https://github.com/open-mmlab/pre-commit-hooks
-    rev: v0.4.0
+    rev: v0.4.1
     hooks:
     -   id: check-ecosystem-validity
         args: [projects_index.yaml]
@@ -77,7 +77,7 @@ Usage:
 
 ```yaml
   - repo: https://github.com/open-mmlab/pre-commit-hooks
-    rev: v0.4.0
+    rev: v0.4.1
     hooks:
     -   id: remove-improper-eol-in-cn-docs
 ```
